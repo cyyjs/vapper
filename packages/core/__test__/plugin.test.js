@@ -149,42 +149,70 @@ test('The configuration file should be loaded correctly', () => {
   })
 })
 
-test('getRouteMeta should be succeed', () => {
-  const pluginApi = new PluginApi()
-  const meta = { foo: 'bar' }
-  pluginApi.router = { resolve (path) { return { resolved: { matched: [{ path: '/fake/path' }], meta } } } }
-  expect(pluginApi.getRouteMeta('/fake/path')).toEqual(meta)
-})
+describe('getRouteInfo: ', () => {
+  // mock router
+  const fakePath = '/fake/path'
+  const matchedRes = {
+    resolved: { matched: [{ path: fakePath }], meta: {} }
+  }
+  const nonMatchedRes = {
+    resolved: { matched: [], meta: {} }
+  }
+  const mockMatchedResolveFn = jest.fn()
+  mockMatchedResolveFn.mockReturnValue(matchedRes)
+  const mockNonMatchedResolveFn = jest.fn()
+  mockNonMatchedResolveFn.mockReturnValue(nonMatchedRes)
 
-test('getRouteMeta should be failed without route', () => {
-  const pluginApi = new PluginApi()
-  expect(pluginApi.getRouteMeta('/fake/path')).toBeNull()
-})
+  beforeEach(() => {
+    mockMatchedResolveFn.mockClear()
+    mockNonMatchedResolveFn.mockClear()
+  })
 
-test('getRouteMeta should be failed no matched', () => {
-  const pluginApi = new PluginApi()
-  const meta = null
-  pluginApi.router = { resolve (path) { return { resolved: { matched: [], meta } } } }
-  expect(pluginApi.getRouteMeta('/fake/path')).toBeNull()
-})
+  test('Should be able to get route information correctly', () => {
+    const pluginApi = new PluginApi()
+    pluginApi.router = { resolve: mockMatchedResolveFn }
 
-test('getRouteInfo should be succeed', () => {
-  const pluginApi = new PluginApi()
-  const meta = {}
-  const resolved = { matched: [{ path: '/fake/path' }], meta }
-  pluginApi.router = { resolve (path) { return { resolved } } }
-  expect(pluginApi.getRouteInfo('/fake/path')).toEqual(resolved)
-})
+    const routerInfo = pluginApi.getRouteInfo(fakePath)
 
-test('getRouteInfo should be failed without route', () => {
-  const pluginApi = new PluginApi()
-  expect(pluginApi.getRouteInfo('/fake/path')).toEqual({})
-})
+    expect(mockMatchedResolveFn).toHaveBeenCalledWith({ path: fakePath })
+    expect(routerInfo).toEqual(matchedRes.resolved)
+  })
 
-test('getRouteInfo should be failed no matched', () => {
-  const pluginApi = new PluginApi()
-  const meta = {}
-  const resolved = { matched: [], meta }
-  pluginApi.router = { resolve (path) { return { resolved } } }
-  expect(pluginApi.getRouteInfo('/fake/path')).toEqual({})
+  test('The getRouteInfo function should return an empty object when there is no router instance', () => {
+    const pluginApi = new PluginApi()
+    expect(pluginApi.getRouteInfo(fakePath)).toEqual({})
+  })
+
+  test('The getRouteInfo function should return an empty object when the match fails.', () => {
+    const pluginApi = new PluginApi()
+    const meta = {}
+    const resolved = { matched: [], meta }
+    pluginApi.router = { resolve (path) { return { resolved } } }
+    expect(pluginApi.getRouteInfo(fakePath)).toEqual({})
+  })
+
+  test('Routing meta should be obtained correctly', () => {
+    const pluginApi = new PluginApi()
+    pluginApi.router = { resolve: mockMatchedResolveFn }
+
+    const routeMeta = pluginApi.getRouteMeta(fakePath)
+
+    expect(mockMatchedResolveFn).toHaveBeenCalledWith({ path: fakePath })
+    expect(routeMeta).toEqual({})
+  })
+
+  test('The getRouteMeta function should return null when there is no router instance', () => {
+    const pluginApi = new PluginApi()
+    expect(pluginApi.getRouteMeta(fakePath)).toBeNull()
+  })
+
+  test('The getRouteMeta function should return an empty object when the match fails.', () => {
+    const pluginApi = new PluginApi()
+    pluginApi.router = { resolve: mockNonMatchedResolveFn }
+
+    const routeMeta = pluginApi.getRouteMeta(fakePath)
+
+    expect(mockNonMatchedResolveFn).toHaveBeenCalledWith({ path: fakePath })
+    expect(routeMeta).toBeNull()
+  })
 })
