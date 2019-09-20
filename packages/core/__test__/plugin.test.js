@@ -148,3 +148,43 @@ test('The configuration file should be loaded correctly', () => {
     ssr: true
   })
 })
+
+test('getRouteMeta should be succeed', () => {
+  const pluginApi = new PluginApi()
+  const meta = { foo: 'bar' }
+  pluginApi.router = { resolve (path) { return { resolved: { matched: [{ path: '/fake/path' }], meta } } } }
+  expect(pluginApi.getRouteMeta('/fake/path')).toEqual(meta)
+})
+
+test('getRouteMeta should be failed without route', () => {
+  const pluginApi = new PluginApi()
+  expect(pluginApi.getRouteMeta('/fake/path')).toBeNull()
+})
+
+test('getRouteMeta should be failed no matched', () => {
+  const pluginApi = new PluginApi()
+  const meta = null
+  pluginApi.router = { resolve (path) { return { resolved: { matched: [], meta } } } }
+  expect(pluginApi.getRouteMeta('/fake/path')).toBeNull()
+})
+
+test('getRouteInfo should be succeed', () => {
+  const pluginApi = new PluginApi()
+  const meta = {}
+  const resolved = { matched: [{ path: '/fake/path' }], meta }
+  pluginApi.router = { resolve (path) { return { resolved } } }
+  expect(pluginApi.getRouteInfo('/fake/path')).toEqual(resolved)
+})
+
+test('getRouteInfo should be failed without route', () => {
+  const pluginApi = new PluginApi()
+  expect(pluginApi.getRouteInfo('/fake/path')).toEqual({})
+})
+
+test('getRouteInfo should be failed no matched', () => {
+  const pluginApi = new PluginApi()
+  const meta = {}
+  const resolved = { matched: [], meta }
+  pluginApi.router = { resolve (path) { return { resolved } } }
+  expect(pluginApi.getRouteInfo('/fake/path')).toEqual({})
+})
