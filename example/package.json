@@ -1,0 +1,79 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vapper dev",
+    "build": "vapper build",
+    "start": "vapper start",
+    "generate": "vapper generate",
+    "koa": "cross-env NODE_ENV=development node server-koa.js",
+    "express": "cross-env NODE_ENV=development node server-express.js",
+    "lint": "vue-cli-service lint",
+    "test:e2e": "node ./scripts/e2eRunner.js",
+    "cypress": "cypress run"
+  },
+  "dependencies": {
+    "@vapper/core": "^0.6.1",
+    "@vapper/plugin-cookie": "^0.4.5",
+    "@vapper/plugin-prerender": "^0.1.4",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
+    "core-js": "^2.6.5",
+    "cross-env": "^6.0.0",
+    "express": "^4.17.1",
+    "graphql": "^14.5.6",
+    "graphql-tag": "^2.10.1",
+    "isomorphic-fetch": "^2.2.1",
+    "koa": "^2.8.1",
+    "vue": "^2.6.10",
+    "vue-apollo": "^3.0.0-rc.6",
+    "vue-router": "^3.0.3"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "chalk": "^2.4.2",
+    "cypress": "^3.4.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "execa": "^2.0.4",
+    "fs-extra": "^8.1.0",
+    "vue-template-compiler": "^2.6.10",
+    "wait-on": "^3.3.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "globals": {
+      "describe": true,
+      "it": true,
+      "expect": true,
+      "cy": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}

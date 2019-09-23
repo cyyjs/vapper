@@ -7,7 +7,7 @@
   "scripts": {
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env NODE_ENV=test jest --coverage",
-    "test:e2e": "node ./scripts/e2eRunner.js",
+    "test:e2e": "node ./example/scripts/e2eRunner.js",
     "lint": "standard --fix",
     "commit": "git-cz"
   },
@@ -22,7 +22,6 @@
     "babel-jest": "^24.9.0",
     "chalk": "^2.4.2",
     "cross-env": "^5.2.0",
-    "cypress": "^3.4.1",
     "cz-lerna-changelog": "^2.0.2",
     "execa": "^2.0.4",
     "fs-extra": "^8.1.0",
@@ -39,7 +38,7 @@
   },
   "standard": {
     "ignore": [
-      "examples/**",
+      "example/**",
       "*.ejs"
     ],
     "globals": [
