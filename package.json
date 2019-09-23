@@ -7,7 +7,7 @@
   "scripts": {
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env NODE_ENV=test jest --coverage",
-    "test:e2e": "node ./example/scripts/e2eRunner.js",
+    "test:e2e": "node ./e2e/scripts/e2eRunner.js",
     "lint": "standard --fix",
     "commit": "git-cz"
   },
@@ -38,7 +38,8 @@
   },
   "standard": {
     "ignore": [
-      "example/**",
+      "examples/**",
+      "e2e/**",
       "*.ejs"
     ],
     "globals": [
